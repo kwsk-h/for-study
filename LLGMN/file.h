@@ -4,36 +4,27 @@
 #include<iostream>
 #include<vector>
 #include<fstream>
+#include<sstream>
 #include<string>
 using namespace std;
 
-void fileset(string filename, vector<vector<double>>& datas, string data_type); //ファイル読み込み用
+void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
 
-void fileset(string filename, vector<vector<double>>& datas, string data_type)
+void fileset(string filename, vector<vector<double>>& datas)
 {
-	ifstream file(filename);
-	if (file.fail()) {	// ファイルオープンに失敗したらそこで終了
+	ifstream ifs_file(filename);
+	if (ifs_file.fail()) {	// ファイルオープンに失敗したらそこで終了
 		cerr << "cannot open the file - '" << filename << "'" << endl;
 		exit(1);
 	}
-	while (!file.eof())
-	{
+	string line;
+	while(getline(ifs_file, line)) { // 1行読んで
+		replace(line.begin(), line.end(), ',', ' '); //カンマ区切りを空白区切りに
+		istringstream iss(line);
 		vector<double> inner;
-		double ch1, ch2, ch3, ch4;
-		char split;//「,」の空読み用
-		if (data_type == "data")
-		{
-			file >> ch1 >> split >> ch2;
-			inner.push_back(ch1);
-			inner.push_back(ch2);
-		}
-		if (data_type == "lavel")
-		{
-			file >> ch1 >> split >> ch2 >> split >> ch3 >> split >> ch4;
-			inner.push_back(ch1);
-			inner.push_back(ch2);
-			inner.push_back(ch3);
-			inner.push_back(ch4);
+		double data;
+		while (iss >> data) { // 1個ずつ切り分ける
+			inner.push_back(data);
 		}
 		datas.push_back(inner);
 	}
