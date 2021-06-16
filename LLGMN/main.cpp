@@ -1,4 +1,5 @@
 #include "LLGMN.h"
+#include "file.h"
 
 int main(void)
 {
@@ -12,11 +13,11 @@ int main(void)
 	vector<vector<double>> test_labels;
 
 	//file読み込み
-	cout << "file読み込み" << endl;
-	llgmn.fileset("data/lea_sig.csv", input_datas, "data");
-	llgmn.fileset("data/lea_T_sig.csv", input_labels, "lavel");
-	llgmn.fileset("data/dis_sig.csv", test_datas, "data");
-	llgmn.fileset("data/dis_T_sig.csv", test_labels, "lavel");
+	fileset("data/lea_sig.csv", input_datas, "data");
+	fileset("data/lea_T_sig.csv", input_labels, "lavel");
+	fileset("data/dis_sig.csv", test_datas, "data");
+	fileset("data/dis_T_sig.csv", test_labels, "lavel");
+	cout << "file読み込みOK" << endl;
 
 	//パラメータ設定
 	cout << "パラメータ設定" << endl;

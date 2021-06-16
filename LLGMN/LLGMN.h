@@ -29,7 +29,6 @@ public:
 	void learn_online(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //逐次学習用
 	void learn_batch(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //一括学習用
 	void test(vector<vector<double>>& test_data, vector<vector<double>>& test_label); //テスト用
-	void fileset(string filename, vector<vector<double>>& datas, string data_type); //ファイル読み込み用
 };
 
 //多次元配列確保及び初期化用マクロ
