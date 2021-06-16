@@ -214,6 +214,7 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 void LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test_label)
 {
 	int count = 0;
+	int jadge;
 	int n, i;
 	int size = test_data.size();
 	double J = 0; //評価関数
@@ -235,22 +236,22 @@ void LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test
 		for (i = 0; i < _K; i++)
 		{
 			J += -test_label[n][i] * log(Y[n][i]);
-			cout << Y[n][i] << "\t";
+			//cout << Y[n][i] << "\t";
 		}
-		cout << endl;
+		//cout << endl;
 	}
+	cout << "J = " << J << endl;
 
-	for (n = 0; n < 200; n++) {
-		if ((Y[n][0] > Y[n][1]) && (Y[n][0] > Y[n][2]) && (Y[n][0] > Y[n][3])) { count++; }
-	}
-	for (n = 200; n < 400; n++) {
-		if ((Y[n][1] > Y[n][0]) && (Y[n][1] > Y[n][2]) && (Y[n][1] > Y[n][3])) { count++; }
-	}
-	for (n = 400; n < 600; n++) {
-		if ((Y[n][2] > Y[n][0]) && (Y[n][2] > Y[n][1]) && (Y[n][2] > Y[n][3])) { count++; }
-	}
-	for (n = 600; n < 800; n++) {
-		if ((Y[n][3] > Y[n][0]) && (Y[n][3] > Y[n][1]) && (Y[n][3] > Y[n][2])) { count++; }
+	//判別結果
+	for (n = 0; n < size; n++) {
+		//最終層出力が最大のクラス
+		if ((Y[n][0] > Y[n][1]) && (Y[n][0] > Y[n][2]) && (Y[n][0] > Y[n][3])) { jadge = 0; }	
+		else if ((Y[n][1] > Y[n][0]) && (Y[n][1] > Y[n][2]) && (Y[n][1] > Y[n][3])) { jadge = 1; }
+		else if ((Y[n][2] > Y[n][0]) && (Y[n][2] > Y[n][1]) && (Y[n][2] > Y[n][3])) { jadge = 2; }
+		else if ((Y[n][3] > Y[n][0]) && (Y[n][3] > Y[n][1]) && (Y[n][3] > Y[n][2])) { jadge = 3; }
+
+		//テストラベルと一致する回数
+		if (test_label[n][jadge] == 1) { count++; }
 	}
 	cout << "識別率 = " << (double)count / (double)size << endl;
 }
