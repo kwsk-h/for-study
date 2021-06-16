@@ -1,4 +1,16 @@
 #pragma once
+/*
+LLGMN program
+
+逐次学習，一括学習実装
+
+―――――初期設定―――――
+入力次元数 D					　2
+クラス数 K						　4
+コンポーネント数 M	　2
+学習率 ε								0.1
+――――――――――――――
+*/
 
 #include<stdio.h>
 #include<iostream>
