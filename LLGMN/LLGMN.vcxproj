@@ -143,6 +143,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TA_LLGMN.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="LLGMN.h" />
   </ItemGroup>
