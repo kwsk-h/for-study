@@ -21,6 +21,7 @@ LLGMN program
 #include<fstream>
 #include<string>
 #include<random>
+#include<algorithm>
 using namespace std;
 
 class LLGMN

@@ -67,7 +67,7 @@ int main(void)
 		cerr << testdataset[n] << endl;
 		fileset(testdataset[n]/*"data/dis_sig.csv"*/, test_datas);
 		fileset(testlabelset[n]/*"data/dis_T_sig.csv"*/, test_labels);
-		cout << "テストデータ読み込みOK" << "\n" << endl;
+		cout << "テストデータ読み込みOK" << endl;
 
 		//テスト
 		llgmn.test(test_datas, test_labels);

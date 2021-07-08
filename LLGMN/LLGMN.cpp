@@ -134,7 +134,7 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 	auto O_2 = make_v<double>(size, _K, _M); //２層目出力用
 	auto Y = make_v<double>(size, _K); //３層目出力用
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
-
+	cout << "count" << "\tJ" << endl;
 	while (count < 1000)
 	{
 		//初期化
@@ -162,7 +162,7 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 		}
 
 		count++;
-		cout << "count = " << count << "\tJ = " << J << endl;
+		cout << count << "\t" << J << endl;
 	}
 	cout << endl;
 }
@@ -177,6 +177,7 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 	auto O_2 = make_v<double>(size, _K, _M); //２層目出力用
 	auto Y = make_v<double>(size, _K); //３層目出力用	
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
+	cout << "count" <<  "\tJ" << endl;
 	while (count < 1000)
 	{
 		//初期化
@@ -206,7 +207,7 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 		backward_batch(input_label, O_2, Y, O, grad);
 
 		count++;
-		cout << "count = " << count << "\tJ = " << J << endl;
+		cout << count << "\t" << J << endl;
 	}
 	cout << endl;
 }
@@ -244,14 +245,12 @@ void LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test
 
 	//判別結果
 	for (n = 0; n < size; n++) {
-		//最終層出力が最大のクラス
-		if ((Y[n][0] > Y[n][1]) && (Y[n][0] > Y[n][2]) && (Y[n][0] > Y[n][3])) { jadge = 0; }	
-		else if ((Y[n][1] > Y[n][0]) && (Y[n][1] > Y[n][2]) && (Y[n][1] > Y[n][3])) { jadge = 1; }
-		else if ((Y[n][2] > Y[n][0]) && (Y[n][2] > Y[n][1]) && (Y[n][2] > Y[n][3])) { jadge = 2; }
-		else if ((Y[n][3] > Y[n][0]) && (Y[n][3] > Y[n][1]) && (Y[n][3] > Y[n][2])) { jadge = 3; }
+		//最終層出力(事後確率)が最大のクラス
+		vector<double>::iterator iter = max_element(Y[n].begin(), Y[n].end()); //最大値取得
+		size_t index = distance(Y[n].begin(), iter);//最大値のイテレータ取得
 
 		//テストラベルと一致する回数
-		if (test_label[n][jadge] == 1) { count++; }
+		if (test_label[n][index] == 1) { count++; }
 	}
-	cout << "識別率 = " << (double)count / (double)size << endl;
+	cout << "識別率 = " << (double)count / (double)size << "\n" << endl;
 }
