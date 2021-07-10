@@ -20,7 +20,7 @@ void LLGMN::input_conversion(const vector<double>& input_data, vector<double>& c
 	}
 }
 
-void LLGMN::set_weight(vector<vector<vector<double>>>& weight)
+void LLGMN::set_weight(void)
 {
 	srand(time(NULL));
 	for (int i = 0; i < _K; i++)
@@ -29,14 +29,14 @@ void LLGMN::set_weight(vector<vector<vector<double>>>& weight)
 		{
 			for (int k = 0; k < _H; k++)
 			{
-				weight[i][j][k] = ((double)rand() / RAND_MAX) * 2 - 1;
+				_weight[i][j][k] = ((double)rand() / RAND_MAX) * 2 - 1;
 			}
 		}
 	}
 	//重みが0のところを0にする
 	for (int k = 0; k < _H; k++)
 	{
-		weight[_K - 1][_M - 1][k] = 0;
+		_weight[_K - 1][_M - 1][k] = 0;
 	}
 }
 
@@ -94,8 +94,6 @@ void LLGMN::backward_online(vector<double>input_label, vector<vector<double>>& O
 			}
 		}
 	}
-	//重みを更新
-	weight_update(grad);
 }
 void LLGMN::backward_batch(vector<vector<double>>input_label, vector<vector<vector<double>>>& O_2, vector<vector<double>>& Y, vector<vector<double>>& O, vector<vector<vector<double>>>& grad)
 {//勾配部分（微分のところ）の計算
@@ -109,8 +107,6 @@ void LLGMN::backward_batch(vector<vector<double>>input_label, vector<vector<vect
 			}
 		}
 	}
-	//重みを更新
-	weight_update(grad);
 }
 
 void LLGMN::weight_update(vector<vector<vector<double>>>& grad)
@@ -118,7 +114,7 @@ void LLGMN::weight_update(vector<vector<vector<double>>>& grad)
 	for (int k = 0; k < _H; k++) {
 		for (int i = 0; i < _K; i++) {
 			for (int j = 0; j < _M; j++) {
-				_weight[i][j][k] = _weight[i][j][k] - _epsilon * grad[i][j][k];
+				_weight[i][j][k] -= _epsilon * grad[i][j][k];
 			}
 		}
 	}
@@ -134,10 +130,11 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 	auto O_2 = make_v<double>(size, _K, _M); //２層目出力用
 	auto Y = make_v<double>(size, _K); //３層目出力用
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
+	set_weight();//重みweight初期生成
 	cout << "count" << "\tJ" << endl;
 	while (count < 1000)
 	{
-		//初期化
+		//初期化		
 		J = 0;
 		fill_v(O, 0);
 		fill_v(O_2, 0);
@@ -147,7 +144,7 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 		{
 			//初期化
 			fill_v(grad, 0);
-
+			
 			//層計算
 			forward(input_data[n], O_2[n], Y[n], O[n]);
 
@@ -159,6 +156,7 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 
 			//重み更新
 			backward_online(input_label[n], O_2[n], Y[n], O[n], grad);
+			weight_update(grad);
 		}
 
 		count++;
@@ -177,6 +175,7 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 	auto O_2 = make_v<double>(size, _K, _M); //２層目出力用
 	auto Y = make_v<double>(size, _K); //３層目出力用	
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
+	set_weight();//重みweight初期生成
 	cout << "count" <<  "\tJ" << endl;
 	while (count < 1000)
 	{
@@ -186,7 +185,6 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 		fill_v(O_2, 0);
 		fill_v(Y, 0);
 		fill_v(grad, 0);
-
 		for (n = 0; n < size; n++)
 		{
 			//層計算
@@ -205,6 +203,7 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 
 		//重み更新
 		backward_batch(input_label, O_2, Y, O, grad);
+		weight_update(grad);
 
 		count++;
 		cout << count << "\t" << J << endl;

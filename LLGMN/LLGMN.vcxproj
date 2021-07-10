@@ -141,9 +141,9 @@
   <ItemGroup>
     <ClCompile Include="LLGMN.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TA_LLGMN.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TA_LLGMN.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="LLGMN.h" />
   </ItemGroup>
