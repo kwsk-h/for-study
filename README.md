@@ -6,3 +6,4 @@
 *プログラム名　作成者　日付*
 ***
 * LLGMN by Kawasaki 21/06/17  
+* Kmeans by Kawasaki 21/10/17  
