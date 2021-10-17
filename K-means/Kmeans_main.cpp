@@ -25,7 +25,7 @@ void update_cog(vector<_subData> datas, vector<_subData>& cog_axis);
 
 int main() {
     vector<string> dataFiles;
-    vector<string> useData = { "1001"};
+    vector<string> useData = { "sub"};
     vector<_subData> datas;
     vector<_subData> cog_axis(K);
     vector<_subData> bef_cog(K);
