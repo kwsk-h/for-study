@@ -83,7 +83,8 @@ ax.set_ylim(-8, 8)
     parameter推定
 -----------------'''
 # step1 parameter set
-mu = np.array([[-4, 0], [-3, 0], [0, 0], [2, 0], [4, 0]])
+mu = ans_mu#np.array([[-4, 0], [-3, 0], [0, 0], [2, 0], [4, 0]])
+#sigma = ans_sigma
 sigma = np.array([[[1, 0], [0, 1]],
                   [[1, 0], [0, 1]],
                   [[1, 0], [0, 1]],
