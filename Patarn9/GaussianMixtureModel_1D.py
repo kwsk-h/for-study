@@ -70,6 +70,8 @@ ax3.set_ylim(-5, 7)
 -----------------'''
 # step1 parameter set
 mu = np.array([-2, -3])
+sigma = np.array([2, 0.5])
+pi = np.array([0.1, 0.9])
 muplt = mu
 ct = 0
 while(True):
@@ -81,10 +83,15 @@ while(True):
     Pwx = (pi*pxw.T).T/px  # P(w_i|x_t)
 
     # step3 parameter update
+    pi = np.sum(Pwx, axis=1)/samp
     mu = np.sum((Pwx*X), axis=1)/np.sum(Pwx, axis=1)
+    sigma = np.array([np.sum((Pwx[i]*((X-mu[i])**2)))/np.sum(Pwx[i]) for i in range(c)])
     muplt = np.vstack((muplt, mu))
 
     # step4 likelihood
+    pdf = [norm.pdf(t, mu[i], np.sqrt(sigma[i])) for i in range(c)]
+    pxw = np.array([[pdf[i][Xcnv[t]] for t in range(samp)] for i in range(c)])  # p(x_t|w_i)
+    px = np.sum(pi*pxw.T, axis=1)  # p(x_t)
     likelihood = np.sum(np.log(px))
     if(ct==1):
         likelihoods = likelihood
