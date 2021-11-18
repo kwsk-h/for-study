@@ -40,7 +40,7 @@ ax2.set_ylim(0, 0.25)
 '''-----------------
     likelihood 等高線(μ1，μ2)
 -----------------'''
-# convert X -> sample num, pdf -> p(x_t|w_i)
+# convert X -> sample num
 Xcnv = np.array((X+5)/0.04, dtype=int)
 mus = np.meshgrid(np.arange(-5, 10, 0.05), np.arange(-5, 10, 0.05))
 for mu1 in np.arange(-5, 10, 0.05):
@@ -61,7 +61,7 @@ for mu1 in np.arange(-5, 10, 0.05):
         likelis = np.vstack((likelis, likes))
 # plot
 fig3, ax3 = plt.subplots()
-ax3.contour(mus[0], mus[1], likelis, levels = 100)
+ax3.contour(mus[0], mus[1], likelis, levels=100)
 ax3.set_xlim(-5, 7)
 ax3.set_ylim(-5, 7)
 
