@@ -1,5 +1,23 @@
 #include "LLGMN.h"
 
+LLGMN::LLGMN(int D, int K, int M, double epsilon, double beta, double time, double smp_time)	//コンストラクタ
+{
+	_D = D;								//入力次元
+	_H = 1 + D * (D + 3) / 2;		//非線形変換後の次元
+	_K = K;								//クラス
+	_M = M;								//コンポーネント数
+	_epsilon = epsilon;					//学習率
+	_weight = make_v<double>(_K, _M, _H); //重み用　weight[K][M][H]
+	//TA
+	_beta = beta;							//学習パラメータβ
+	_time = time;							//学習時間
+	_smp_time = smp_time;			//サンプリング時間⊿t[s]
+}
+
+LLGMN::~LLGMN()	//デストラクタ
+{
+
+}
 
 void LLGMN::input_conversion(const vector<double>& input_data, vector<double>& converted_input)
 {//非線形変換(/1 sample)
@@ -131,8 +149,8 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 	auto Y = make_v<double>(size, _K); //３層目出力用
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
 	set_weight();//重みweight初期生成
-	cout << "count" << "\tJ" << endl;
-	while (count < 1000)
+	cout << "count" << "\tJ" << "\tAccuracy" << endl;
+	while (count < (_time / _smp_time))
 	{
 		//初期化		
 		J = 0;
@@ -160,7 +178,7 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 		}
 
 		count++;
-		cout << count << "\t" << J << endl;
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
 	}
 	cout << endl;
 }
@@ -176,8 +194,8 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 	auto Y = make_v<double>(size, _K); //３層目出力用	
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
 	set_weight();//重みweight初期生成
-	cout << "count" <<  "\tJ" << endl;
-	while (count < 1000)
+	cout << "count" <<  "\tJ" << "\tAccuracy" << endl;
+	while (count < (_time / _smp_time))
 	{
 		//初期化
 		J = 0;
@@ -206,12 +224,12 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 		weight_update(grad);
 
 		count++;
-		cout << count << "\t" << J << endl;
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
 	}
 	cout << endl;
 }
 
-void LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test_label)
+vector<vector<double>> LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test_label)
 {
 	int count = 0;
 	int jadge;
@@ -241,15 +259,27 @@ void LLGMN::test(vector<vector<double>>& test_data, vector<vector<double>>& test
 		//cout << endl;
 	}
 	cout << "J = " << J << endl;
-
 	//判別結果
-	for (n = 0; n < size; n++) {
+	getAccuracy(Y, test_label);
+	cout << "識別率 = " << getAccuracy(Y, test_label) << "\n" << endl;
+
+	return Y;
+}
+
+
+double LLGMN::getAccuracy(vector<vector<double>>& Y, const vector<vector<double>>& label)
+{
+	int count = 0;	//正解数
+	int ct = 0;		//総数
+	for (auto y : Y) {
 		//最終層出力(事後確率)が最大のクラス
-		vector<double>::iterator iter = max_element(Y[n].begin(), Y[n].end()); //最大値取得
-		size_t index = distance(Y[n].begin(), iter);//最大値のイテレータ取得
+		vector<double>::iterator iter = max_element(y.begin(), y.end()); //最大値取得
+		size_t index = distance(y.begin(), iter);//最大値のイテレータ取得
 
 		//テストラベルと一致する回数
-		if (test_label[n][index] == 1) { count++; }
+		if (label[ct][index] == 1) count++;
+		ct++;
 	}
-	cout << "識別率 = " << (double)count / (double)size << "\n" << endl;
+	
+	return (double)count / (double)ct;
 }

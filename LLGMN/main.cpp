@@ -1,42 +1,64 @@
 #include "LLGMN.h"
 #include "file.h"
+#include <conio.h>
 
 int main(void)
 {
 	int flag;
-	int ta = 1;
+	bool ta = 1;
+	//LL
+	int D;				//入力次元
+	int K;				//クラス
+	int M;				//コンポーネント数
+	double epsilon;	//学習率
+	//TA
+	double beta;		//学習パラメータβ
+	double time;		//学習時間
+	double eta;		// 評価関数の初期値による大局的な学習率の決定
+	double gamma;	// 評価関数の変動による局所的な学習率の調整
+	double smp;		//サンプリング時間⊿t[s]
+
 	cout << "0:LLGMN or 1:TA_LLGMN ? : ";
 	cin >> ta;
-	LLGMN LL;
-	
-	
-	/* ------学習------ */
+	/*
+	cout << "0:self set param or 1:auto set param ? : ";
+	cin >> flag;
+	while(!flag)
+	{
+		cout << "パラメータ設定" << endl;
+		cout << "コンポーネント数(M) (def 2) : " << M << endl;
+		cout << "学習率(ε) (def 0.1) : " << epsilon << endl;
+		cout<<"学習パラメータ(β) (def 0.7) : " << beta << endl;
+		cout << "学習時間(t) (def 1.0) : " << time << endl;
+		cout << "サンプリング時間(⊿t[s]) (def 0.001) : " << smp << endl;
+	}*/
 
+	
+	/* ------data読み込み------ */
 	vector<vector<double>> input_datas;
 	vector<vector<double>> input_labels;
 
 	//file読み込み
-	fileset(/*"data/input1.txt"*/"data/lea_sig.csv", input_datas);
-	fileset(/*"data/label1.txt"*/"data/lea_T_sig.csv", input_labels);
+	//fileset("data/lea_sig.csv", input_datas);
+	//fileset("data/lea_T_sig.csv", input_labels);
+	fileset("data/input1.txt", input_datas);
+	fileset("data/label1.txt", input_labels);
 	cout << "教師データ読み込みOK" << endl;
+	//for(auto X : input_datas) for (auto x : X) cout << x << endl;
 
-	//パラメータ設定
-	/*
-	cout << "パラメータ設定" << endl;
-	cout << "入力次元(D) : ";
-	cin >> LL._D;
-	cout << "クラス数(K) : ";
-	cin >> LL._K;
-	cout << "コンポーネント数(M) : ";
-	cin >> LL._M;
-	cout << "学習率(ε) : ";
-	cin >> LL._epsilon;
-	*/
+	D = input_datas[0].size();//入力次元
+	K = input_labels[0].size();//クラス
+	LLGMN LL(D, K);
 
+	/* ------学習------ */
 	while (true)
 	{
 		cout << "0:online or 1:batch ? : ";
 		cin >> flag;
+		cout << "--------------------------------------" << endl;
+		if (!ta) cout << "LLGMN" << endl;
+		else cout << "TA_LLGMN" << endl;
+		cout << "--------------------------------------" << endl;
 		//学習
 		if (!flag)
 		{
@@ -62,17 +84,22 @@ int main(void)
 	/* ------テスト------ */
 	vector<string> testdataset = { "data/input2.txt" ,"data/input3.txt" ,"data/input4.txt" };
 	vector<string> testlabelset = { "data/label2.txt" ,"data/label3.txt" ,"data/label4.txt" };
-	for (int n = 0; n < 1; n++)
+	for (int n = 0; n < 3; n++)
 	{
 		vector<vector<double>> test_datas;
 		vector<vector<double>> test_labels;
-		//cout << testdataset[n] << endl;
-		fileset(/*testdataset[n]*/"data/dis_sig.csv", test_datas);
-		fileset(/*testlabelset[n]*/"data/dis_T_sig.csv", test_labels);
+		//fileset("data/dis_sig.csv", test_datas);
+		//fileset("data/dis_T_sig.csv", test_labels);
+		cout << testdataset[n] << endl;
+		fileset(testdataset[n], test_datas);
+		fileset(testlabelset[n], test_labels);
 		cout << "テストデータ読み込みOK" << endl;
 
 		//テスト
-		LL.test(test_datas, test_labels);
+		vector<vector<double>> output_datas;
+		output_datas = LL.test(test_datas, test_labels);
+		string sname = "data/out"+ to_string(n+2)+".txt";
+		filewrite(sname, output_datas);
 	}
 	return 0;
 }
