@@ -7,3 +7,6 @@
 ***
 * LLGMN by Kawasaki 21/06/17  
 * Kmeans by Kawasaki 21/10/17  
+***
+<br>
+Patarn〇は「続・わかりやすい　パターン認識　～教師なし学習入門～」　石井，上田　より
