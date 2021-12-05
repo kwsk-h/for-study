@@ -68,7 +68,7 @@ class doCRP:
             crp = CRP(self.num, a)
             crp.using_table()
             df = crp.transition.set_index('n')
-            result = crp.table
+            result = np.sort(crp.table)[::-1]
             if a == self.alpha[0]:
                 dff = df
 
