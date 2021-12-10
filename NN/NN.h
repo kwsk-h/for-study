@@ -35,34 +35,39 @@ class NN
 {
 public:
 	int _D;				//入力次元
-	int _K;				//クラス数
+	int _C;				//クラス数
 	int _M;				//中間層の要素数
 	int _Mk;			//中間層の層数
 	double _epsilon;	//学習率
 	int _batch_size; //batchサイズの指定
 
 	//各層の重みや各層の出力に利用する構造体
-	template <typename TYPE>
+	template <typename T>
 	struct LAYER {
-		vector<TYPE> First;				//入力層から中間層へ
-		vector<vector<TYPE>> Mid;	//中間層から中間層へ
-		vector<TYPE> Last;				//中間層から出力層へ
+		vector<T> First;				//入力層から中間層へ
+		vector<vector<T>> Mid;	//中間層から中間層へ
+		vector<T> Last;				//中間層から出力層へ
 	};
 
 	LAYER<vector<double>> _weight;	//各層の重み
 	LAYER<double> _output;					//各層の出力
 
 	//Constructor
-	NN(int D, int K, int M, int Mk, double epsilon, int batch_size);//Parameter setting
+	NN(int D, int C, int M, int Mk, double epsilon, int batch_size);//Parameter setting
 	//Destructor
 	~NN();
 
 	//重みの初期値設定
 	void setWeight();
 
-	double sigma(const vector<double>& V);		//vector sum
-	vector<double> sigmoid(vector<double>& s);	//return 1/(1+exp(-s))
-	double d_sigmaoid(double y);							//return y(1-y)
+	//vector sum
+	double sigma(const vector<double>& V);
+
+	//return 1/(1+exp(-s))
+	vector<double> sigmoid(vector<double>& s);
+
+	//return y(1-y)
+	double d_sigmaoid(double y);
 
 	//前向き計算　input_data：入力データ
 	void forward(const vector<double> input_data);
