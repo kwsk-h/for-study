@@ -41,9 +41,8 @@ class PYP:
             self.n += 1
             if self.n%1000 == 0:
                 print(self.n, end='-')
-            sit = (self.table - self.beta)
-            sit = np.append(sit, self.alpha+self.beta*self.c)
-            sit = sit/(self.n-1+self.alpha)
+            sit = np.array([(self.table[i] - self.beta)/(self.n-1+self.alpha) for i in range(self.c)])
+            sit = np.append(sit, (self.alpha+self.beta*self.c)/(self.n-1+self.alpha))
             table_name = np.append(self.table_name, str(self.c+1))
             flag = np.random.choice(table_name, p=sit)
             if flag == str(self.c+1):
@@ -65,17 +64,18 @@ class doPYP:
         """Params num <- int."""
         self.alpha = 2
         self.beta = [0, 0.2, 0.3, 0.4]
-        self.dff = pd.DataFrame()
-        self.tables = []
-        self.pyp = []
+        self.do(1000)
+        self.dolog(100000)
+        self.dff
+        self.tables
 
     def do(self, num):
         """Do PYP β比較."""
         for b in self.beta:
-            self.self.pyp = PYP(num, self.alpha, b)
-            self.pyp.using_table()
-            df = self.pyp.transition.set_index('n')
-            result = self.pyp.table
+            pyp = PYP(num, self.alpha, b)
+            pyp.using_table()
+            df = pyp.transition.set_index('n')
+            result = pyp.table
             if b == self.beta[0]:
                 self.dff = df['c']
             else:
@@ -91,23 +91,18 @@ class doPYP:
     def dolog(self, num):
         """Do PYP table-n_i log."""
 
-        self.pyp = [PYP(num, self.alpha, b) for b in [0, 0.8]]
-        [self.pyp[i].using_table() for i in range(2)]
-        self.tables = [np.sort(self.pyp[i].table)[::-1] for i in range(2)]
-        df = [self.pyp[i].transition.set_index('n') for i in range(2)]
-        self.dff = pd.concat([df[0]['c'], df[1]['c']], axis='columns')
+        pyp = [PYP(num, self.alpha, b) for b in [0, 0.8]]
+        [pyp[i].using_table() for i in range(2)]
+        self.tables = [pyp[i].table for i in range(2)]
 
         fig2 = plt.figure()  # reset用
         ax2 = fig2.add_subplot(111)
-        ax2.plot(np.arange(1, self.pyp[0].c+1), self.tables[0])
-        ax2.plot(np.arange(1, self.pyp[1].c+1), self.tables[1])
+        ax2.plot(np.arange(1, pyp[0].c+1), self.tables[0])
+        ax2.plot(np.arange(1, pyp[1].c+1), self.tables[1])
         ax2.set_xlabel('table', fontsize=20)
         ax2.set_ylabel('n_i', fontsize=20)
         ax2.set_yscale('log')  # メイン: y軸をlogスケールで描く
         ax2.set_xscale('log')
         plt.savefig('Pitman-Yor_table_log.png', bbox_inches="tight", pad_inches=0.1)
 
-
 do = doPYP()
-# do.do(1000)
-do.dolog(100000)
