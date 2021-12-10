@@ -11,7 +11,8 @@ using namespace std;
 void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
 void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
 
-void fileset(string filename, vector<vector<double>>& datas)
+template<typename T>
+void fileset(string filename, vector<vector<T>>& datas)
 {
 	ifstream ifs_file(filename);
 	if (ifs_file.fail()) {	// ファイルオープンに失敗したらそこで終了
@@ -22,8 +23,8 @@ void fileset(string filename, vector<vector<double>>& datas)
 	while(getline(ifs_file, line)) { // 1行読んで
 		replace(line.begin(), line.end(), ',', ' '); //カンマ区切りを空白区切りに
 		istringstream iss(line);
-		vector<double> inner;
-		double data;
+		vector<T> inner;
+		T data;
 		while (iss >> data) { // 1個ずつ切り分ける
 			inner.push_back(data);
 		}
@@ -31,8 +32,8 @@ void fileset(string filename, vector<vector<double>>& datas)
 	}
 }
 
-
-void filewrite(string filename, vector<vector<double>>& datas) 
+template<typename T>
+void filewrite(string filename, vector<vector<T>>& datas) 
 {
 	ofstream ofs(filename);
 	if (ofs.fail()) {	// ファイルオープンに失敗したらそこで終了
