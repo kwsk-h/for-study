@@ -3,6 +3,8 @@
 Created on Thu Dec  2 17:06:29 2021
 
 @author: kwsk0
+
+Attention!! doPYP内のdologはべき乗側を見るためのものだが，dolog(100000)を実行すると3日以上かかるので注意
 """
 
 
@@ -109,5 +111,5 @@ class doPYP:
 
 
 do = doPYP()
-# do.do(1000)
+do.do(1000)
 do.dolog(100000)
