@@ -69,12 +69,12 @@ public:
 	//return y(1-y)
 	double d_sigmaoid(double y);
 
-	//前向き計算　input_data：入力データ
+	//前向き計算　input_data：入力データ( = input_datas[n])
 	void forward(const vector<double> input_data);
 
 	//誤差逆伝搬 重み更新　delta：誤差
 	void backward(const vector<double>& delta);
 
-	//学習
-	void Learning();
+	//学習　input_datas：入力データ，input_labels：教師ラベル
+	void Learning(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels);
 };

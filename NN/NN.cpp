@@ -1,5 +1,8 @@
 #include "NN.h"
 
+random_device rnd;     // 非決定的な乱数生成器を生成
+mt19937 mt(rnd());      // メルセンヌ・ツイスタの32ビット版、引数は初期シード値
+
 //---------------------------
 // Constructor
 //---------------------------
@@ -35,10 +38,7 @@ NN::~NN() {
 // Set init Weight
 //---------------------------
 void NN::setWeight() {
-	random_device rnd;     // 非決定的な乱数生成器を生成
-	mt19937 mt(rnd());      // メルセンヌ・ツイスタの32ビット版、引数は初期シード値
 	uniform_real_distribution<> rand_abs1(-1, 1);        // [-1, 1] 範囲の一様乱数
-
 	for (auto& V : _weight.First) for (auto& v : V) {
 		v = rand_abs1(mt);
 	}
@@ -134,19 +134,20 @@ void NN::forward(const vector<double> input_data)
 // Back propagation
 //---------------------------
 void NN::backward(const vector<double>& delta) {
-	double dLdY;
+	vector<double> dLdY(_C, 0);
 	auto dLdO = make_v<double>(_Mk, _M);
+	fill_v(dLdO, 0);
 
 	//出力層から中間層へ
 	for (int c = 0; c < _C; c++)
 	{
-		dLdY = 2 * delta[c];	//2(Y - t)
+		dLdY[c] += 2 * delta[c];	//2(Y - t)
 		for (int m = 0; m < _M; m++)
 		{			
-			_weight.Last[m][c] -= _epsilon * _output.Mid[_Mk - 1][m] * d_sigmaoid(_output.Last[c]) * dLdY;  // update weight
-			dLdO[_Mk - 1][m] += _weight.Last[m][c] * d_sigmaoid(_output.Last[c]) * dLdY;
+			_weight.Last[m][c] -= _epsilon * _output.Mid[_Mk - 1][m] * d_sigmaoid(_output.Last[c]) * dLdY[c];  // update weight
+			dLdO[_Mk - 1][m] += _weight.Last[m][c] * d_sigmaoid(_output.Last[c]) * dLdY[c];
 		}
-		_weight.Last[_M][c] -= _epsilon * 1 * d_sigmaoid(_output.Last[c]) * dLdY; // update bias weight
+		_weight.Last[_M][c] -= _epsilon * 1 * d_sigmaoid(_output.Last[c]) * dLdY[c]; // update bias weight
 	}
 
 	//中間層から中間層へ
@@ -175,6 +176,34 @@ void NN::backward(const vector<double>& delta) {
 
 }
 
-void NN::Learning() {
-
+//---------------------------
+// minibatch Learning
+//---------------------------
+void NN::Learning(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels) {
+	int N = input_datas.size(); 
+	uniform_int_distribution<> randN(0, N - 1);
+	double L = 999;
+	int num = 0;
+	while (L > 0.01)
+	{
+		num++;
+		//minibatch
+		for (int t = 0; t < N / _batch_size; t++)
+		{
+			L = 0;
+			vector<double> delta(_C, 0);
+			for (int i = 0; i < _batch_size; i++)
+			{
+				int n = randN(mt);
+				forward(input_datas[n]);
+				for (int c = 0; c < _C; c++)
+				{
+					delta[c] += (_output.Last[c] - input_labels[n][c]) / _batch_size;
+					L += pow(delta[c], 2) / _C;
+				}
+			}
+			backward(delta);
+		}
+		cout << num << " : " << L << endl;
+	}			
 }

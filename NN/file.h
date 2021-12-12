@@ -8,8 +8,8 @@
 #include<string>
 using namespace std;
 
-void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
-void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
+//void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
+//void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
 
 template<typename T>
 void fileset(string filename, vector<vector<T>>& datas)
