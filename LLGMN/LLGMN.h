@@ -29,6 +29,7 @@ smp_time					0.001
 #include<algorithm>
 #include<iomanip>
 #include "vecMACRO.h"
+#include "confusionmatrix.h"
 using namespace std;
 
 class LLGMN
@@ -53,7 +54,6 @@ public:
 	void learn_online(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //逐次学習用
 	void learn_batch(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //一括学習用
 	vector<vector<double>> test(vector<vector<double>>& test_data, vector<vector<double>>& test_label); //テスト用
-	double getAccuracy(vector<vector<double>>& Y, const vector<vector<double>>& label); //正解率計算 return Accuracy;
 
 
 	//TA_LLGMN用
@@ -68,5 +68,8 @@ public:
 	void set_eta(double J);	//ηセット
 	void talearn_online(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //逐次学習用
 	void talearn_batch(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //一括学習用
+
+private:
+	ConfusionMatrix CM;
 };
 

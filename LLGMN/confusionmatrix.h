@@ -19,15 +19,18 @@ private:
 
 public:
 	//Constructor
+	ConfusionMatrix();
 	ConfusionMatrix(const vector<vector<double>> out, const vector<vector<double>> label);
 
 	//Destructor
 	~ConfusionMatrix();
 
-
+	//settting init Pram
+	void setPram(const vector<vector<double>> out, const vector<vector<double>> label);
 	//
 	vector<vector<double>>  getConfusionMatrix();
 	double getAccuracy();
+	double getAccuracy(int classNum);
 
 };
 
@@ -37,7 +40,28 @@ public:
 // out[sample][class] ：事後確率
 // label[sample][class] ：正解ラベル
 //--------------------------------
+ConfusionMatrix::ConfusionMatrix()
+{
+
+}
 ConfusionMatrix::ConfusionMatrix(const vector<vector<double>> out, const vector<vector<double>> label)
+{
+	setPram(out, label);
+}
+
+//Destructor
+ConfusionMatrix::~ConfusionMatrix()
+{
+
+}
+
+//--------------------------------
+//settting init Pram
+// 
+// out[sample][class] ：事後確率
+// label[sample][class] ：正解ラベル
+//--------------------------------
+void ConfusionMatrix::setPram(const vector<vector<double>> out, const vector<vector<double>> label)
 {
 	OUT = out;
 	Label = label;
@@ -45,12 +69,7 @@ ConfusionMatrix::ConfusionMatrix(const vector<vector<double>> out, const vector<
 	N = out.size();
 	confusionMatrix = make_v<double>(C, C);
 	fill_v(confusionMatrix, 0);
-}
-
-//Destructor
-ConfusionMatrix::~ConfusionMatrix()
-{
-
+	getConfusionMatrix();
 }
 
 //--------------------------------
@@ -78,17 +97,11 @@ vector<vector<double>> ConfusionMatrix::getConfusionMatrix()
 
 double ConfusionMatrix::getAccuracy()
 {
-	int count = 0;	//正解数
-	int ct = 0;		//総数
-	for (auto y : OUT) {
-		//最終層出力(事後確率)が最大のクラス
-		vector<double>::iterator iter = max_element(y.begin(), y.end()); //最大値取得
-		size_t index = distance(y.begin(), iter);//最大値のイテレータ取得
-
-		//テストラベルと一致する回数
-		if (Label[ct][index] == 1) count++;
-		ct++;
+		int count = 0;	//正解数
+		int ct = 0;		//総数
+	for (int i = 0; i < C; i++) for (int j = 0; j < C; j++) {
+		if (i == j) count += confusionMatrix[i][i];
+		ct += confusionMatrix[i][j];
 	}
-
 	return (double)count / (double)ct;
 }

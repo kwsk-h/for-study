@@ -178,7 +178,9 @@ void LLGMN::learn_online(vector<vector<double>>& input_data, vector<vector<doubl
 		}
 
 		count++;
-		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 	}
 	cout << endl;
 }
@@ -224,7 +226,9 @@ void LLGMN::learn_batch(vector<vector<double>>& input_data, vector<vector<double
 		weight_update(grad);
 
 		count++;
-		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 	}
 	cout << endl;
 }
@@ -260,26 +264,9 @@ vector<vector<double>> LLGMN::test(vector<vector<double>>& test_data, vector<vec
 	}
 	cout << "J = " << J << endl;
 	//判別結果
-	getAccuracy(Y, test_label);
-	cout << "識別率 = " << getAccuracy(Y, test_label) << "\n" << endl;
+	//Accuracy
+	CM.setPram(Y, test_label);
+	cout << "識別率 = " << CM.getAccuracy() << "\n" << endl;
 
 	return Y;
-}
-
-
-double LLGMN::getAccuracy(vector<vector<double>>& Y, const vector<vector<double>>& label)
-{
-	int count = 0;	//正解数
-	int ct = 0;		//総数
-	for (auto y : Y) {
-		//最終層出力(事後確率)が最大のクラス
-		vector<double>::iterator iter = max_element(y.begin(), y.end()); //最大値取得
-		size_t index = distance(y.begin(), iter);//最大値のイテレータ取得
-
-		//テストラベルと一致する回数
-		if (label[ct][index] == 1) count++;
-		ct++;
-	}
-	
-	return (double)count / (double)ct;
 }

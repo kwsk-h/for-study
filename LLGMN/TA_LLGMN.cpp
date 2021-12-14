@@ -72,7 +72,9 @@ void LLGMN::talearn_online(vector<vector<double>>& input_data, vector<vector<dou
 			w_update(grad);
 		}
 		count++;
-		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 		if (J < 1e-5) break;
 	}	
 	cout << endl;
@@ -122,7 +124,9 @@ void LLGMN::talearn_batch(vector<vector<double>>& input_data, vector<vector<doub
 		w_update(grad);
 
 		count++;
-		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << getAccuracy(Y, input_label) << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 	}
 	cout << endl;
 }

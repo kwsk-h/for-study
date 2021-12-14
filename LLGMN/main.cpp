@@ -1,5 +1,6 @@
 #include "LLGMN.h"
 #include "file.h"
+#include "confusionmatrix.h"
 #include <conio.h>
 
 int main(void)
@@ -99,7 +100,17 @@ int main(void)
 		vector<vector<double>> output_datas;
 		output_datas = LL.test(test_datas, test_labels);
 		string sname = "data/out"+ to_string(n+2)+".txt";
-		filewrite(sname, output_datas);
+		//filewrite(sname, output_datas);
+
+		ConfusionMatrix CM(output_datas, test_labels);
+		vector<vector<double>> confusionmatrix = CM.getConfusionMatrix();
+		cout << "Accuracy = " << CM.getAccuracy() << endl;
+		for (auto CM : confusionmatrix) {
+			for (auto cm : CM) {
+				cout << cm << "\t";
+			}
+			cout << endl;
+		}
 	}
 	return 0;
 }
