@@ -29,6 +29,8 @@ void fileset(string filename, vector<vector<double>>& datas)
 		}
 		datas.push_back(inner);
 	}
+
+	ifs_file.close();
 }
 
 
@@ -46,4 +48,6 @@ void filewrite(string filename, vector<vector<double>>& datas)
 		}
 		ofs << endl;
 	}
+
+	ofs.close();
 }
