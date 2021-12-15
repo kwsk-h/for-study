@@ -266,7 +266,9 @@ vector<vector<double>> LLGMN::test(vector<vector<double>>& test_data, vector<vec
 	//”»•ÊŒ‹‰Ê
 	//Accuracy
 	CM.setPram(Y, test_label);
-	cout << "Ž¯•Ê—¦ = " << CM.getAccuracy() << "\n" << endl;
-
+	cout << "Accuracy = " << CM.getAccuracy() << endl;
+	for (int k = 0; k < _K; k++) {
+		cout << "Class" << k + 1 << " = " << CM.getRecall(k) << endl;
+	}
 	return Y;
 }

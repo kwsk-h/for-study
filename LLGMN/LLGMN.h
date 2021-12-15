@@ -69,7 +69,6 @@ public:
 	void talearn_online(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //逐次学習用
 	void talearn_batch(vector<vector<double>>& input_data, vector<vector<double>>& input_label); //一括学習用
 
-private:
 	ConfusionMatrix CM;
 };
 

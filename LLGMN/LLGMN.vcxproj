@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="confusionmatrix.cpp" />
     <ClCompile Include="LLGMN.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TA_LLGMN.cpp" />
