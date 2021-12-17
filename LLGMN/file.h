@@ -9,6 +9,7 @@
 using namespace std;
 
 void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
+void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
 
 void fileset(string filename, vector<vector<double>>& datas)
 {
@@ -28,4 +29,25 @@ void fileset(string filename, vector<vector<double>>& datas)
 		}
 		datas.push_back(inner);
 	}
+
+	ifs_file.close();
+}
+
+
+void filewrite(string filename, vector<vector<double>>& datas) 
+{
+	ofstream ofs(filename);
+	if (ofs.fail()) {	// ファイルオープンに失敗したらそこで終了
+		cerr << "cannot open the file - '" << filename << "'" << endl;
+		exit(1);
+	}
+	for (auto data : datas) {
+		for (auto x : data) {
+			if (x == data[0]) ofs << x;
+			else ofs << "\t" << x;
+		}
+		ofs << endl;
+	}
+
+	ofs.close();
 }

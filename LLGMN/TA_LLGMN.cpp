@@ -44,7 +44,7 @@ void LLGMN::talearn_online(vector<vector<double>>& input_data, vector<vector<dou
 	auto Y = make_v<double>(size, _K); //３層目出力用
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
 	set_weight();//重みweight初期生成
-	cout << "count" << "\tJ" << endl;
+	cout << "count" << "\tJ" << "\tAccuracy" << endl;
 	while (count < (_time / _smp_time))
 	{
 		//初期化
@@ -72,7 +72,9 @@ void LLGMN::talearn_online(vector<vector<double>>& input_data, vector<vector<dou
 			w_update(grad);
 		}
 		count++;
-		cout << count << "\t" << J << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 		if (J < 1e-5) break;
 	}	
 	cout << endl;
@@ -89,7 +91,7 @@ void LLGMN::talearn_batch(vector<vector<double>>& input_data, vector<vector<doub
 	auto Y = make_v<double>(size, _K); //３層目出力用	
 	auto grad = make_v<double>(_K, _M, _H); //重み更新 微分部用
 	set_weight();//重みweight初期生成
-	cout << "count" << "\tJ" << endl;
+	cout << "count" << "\tJ" << "\tAccuracy" << endl;
 	while (count < (_time / _smp_time))
 	{
 		//初期化
@@ -122,7 +124,9 @@ void LLGMN::talearn_batch(vector<vector<double>>& input_data, vector<vector<doub
 		w_update(grad);
 
 		count++;
-		cout << count << "\t" << J << endl;
+		//Accuracy
+		CM.setPram(Y, input_label);
+		cout << fixed << setprecision(5) << count << "\t" << J << "\t" << CM.getAccuracy() << endl;
 	}
 	cout << endl;
 }
