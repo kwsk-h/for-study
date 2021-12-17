@@ -182,27 +182,33 @@ void NN::backward(const vector<double>& delta) {
 void NN::Learning(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels) {
 	int N = input_datas.size(); 
 	uniform_int_distribution<> randN(0, N - 1);
+	auto delta = make_v<double>(_batch_size, _C); fill_v(delta, 0.0);
 	double L = 999;
 	int num = 0;
 	while (L > 0.01)
 	{
+		L = 0;
 		num++;
 		//minibatch
 		for (int t = 0; t < N / _batch_size; t++)
-		{
-			L = 0;
-			vector<double> delta(_C, 0);
+		{	
 			for (int i = 0; i < _batch_size; i++)
 			{
-				int n = randN(mt);
+				//int n = randN(mt);
+				int n = t;
 				forward(input_datas[n]);
+
+				//clac error
 				for (int c = 0; c < _C; c++)
 				{
-					delta[c] += (_output.Last[c] - input_labels[n][c]) / _batch_size;
-					L += pow(delta[c], 2) / _C;
+					delta[i][c] = (_output.Last[c] - input_labels[n][c]);
+					L += pow(delta[i][c], 2) / _C;
 				}
 			}
-			backward(delta);
+			for (int i = 0; i < _batch_size; i++)
+			{
+				backward(delta[i]);
+			}
 		}
 		cout << num << " : " << L << endl;
 	}			

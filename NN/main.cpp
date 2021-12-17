@@ -25,8 +25,8 @@ int main(void)
 
 	int D = input_datas[0].size();					//“ü—ÍŸŒ³
 	int C = input_labels[0].size();					//ƒNƒ‰ƒX”
-	int M = 4;												//’†ŠÔ‘w‚Ì—v‘f”
-	int Mk = 4;											//’†ŠÔ‘w‚Ì‘w”
+	int M = 3;												//’†ŠÔ‘w‚Ì—v‘f”
+	int Mk = 1;											//’†ŠÔ‘w‚Ì‘w”
 	double epsilon = 0.1;								//ŠwK—¦
 	int batch_size = 1;			//batchƒTƒCƒY‚Ìw’è(1©online, N©batch, n©mini batch)
 
@@ -35,6 +35,7 @@ int main(void)
 	nn.Learning(input_datas, input_labels);
 	cout << endl;
 	for (int i = 0; i < 6; i++) {
+		cout << input_labels[i][0] << " : ";
 		nn.forward(input_datas[i]);
 		for (auto x : nn._output.Last) cout << x << endl;
 	}
