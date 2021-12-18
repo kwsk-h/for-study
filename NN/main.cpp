@@ -28,16 +28,20 @@ int main(void)
 	int M = 3;												//中間層の要素数
 	int Mk = 1;											//中間層の層数
 	double epsilon = 0.1;								//学習率
-	int batch_size = 1;			//batchサイズの指定(1←online, N←batch, n←mini batch)
+	int batch_size = 3;			//batchサイズの指定(1←online, N←batch, n←mini batch)
 
 	NN nn(D, C, M, Mk, epsilon, batch_size);
 	cout << endl;
 	nn.Learning(input_datas, input_labels);
 	cout << endl;
-	for (int i = 0; i < 6; i++) {
-		cout << input_labels[i][0] << " : ";
-		nn.forward(input_datas[i]);
-		for (auto x : nn._output.Last) cout << x << endl;
+	for (int n = 0; n < 6; n++) {
+	//for (int t = 0; t < 8; t++)for (int x = 0; x < 2; x++) {
+	//	int n = 2500 * t + x;
+		for (int i = 0; i < C; i++) {
+			cout << input_labels[n][i] << " : ";
+			nn.forward(input_datas[n], 0);
+			cout << nn._output[0].Last[i] << endl << endl;
+		}
 	}
 
 	return 0;

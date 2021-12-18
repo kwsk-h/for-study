@@ -49,8 +49,8 @@ public:
 		vector<T> Last;				//中間層から出力層へ
 	};
 
-	LAYER<vector<double>> _weight;	//各層の重み
-	LAYER<double> _output;					//各層の出力
+	LAYER<vector<double>> _weight;		//各層の重み
+	vector<LAYER<double>> _output;		//各層の出力 _output[sample] = LAYER<double>
 
 	//Constructor
 	NN(int D, int C, int M, int Mk, double epsilon, int batch_size);//Parameter setting
@@ -69,11 +69,11 @@ public:
 	//return y(1-y)
 	double d_sigmaoid(double y);
 
-	//前向き計算　input_data：入力データ( = input_datas[n])
-	void forward(const vector<double> input_data);
+	//前向き計算　input_data：入力データ( = input_datas[n])，n：サブセット内の番号
+	void forward(const vector<double> input_data, int n);
 
-	//誤差逆伝搬 重み更新　delta：誤差
-	void backward(const vector<double>& delta);
+	//誤差逆伝搬 重み更新　delta：誤差，n：サブセット内の番号
+	void backward(const vector<double>& delta, int n);
 
 	//学習　input_datas：入力データ，input_labels：教師ラベル
 	void Learning(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels);
