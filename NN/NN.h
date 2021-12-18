@@ -49,8 +49,22 @@ public:
 		vector<T> Last;				//中間層から出力層へ
 	};
 
-	LAYER<vector<double>> _weight;		//各層の重み
-	vector<LAYER<double>> _output;		//各層の出力 _output[sample] = LAYER<double>
+
+	//---------------------------------------------------------------
+	//各層の重み _weight 
+	//_weight.First[_D + 1][_M]
+	//_weight.Mid[_Mk - 1][_M + 1][_M]
+	//_weight.Last[_M + 1][_C]
+	//---------------------------------------------------------------
+	LAYER<vector<double>> _weight;
+
+	//---------------------------------------------------------------
+	//各層の出力 _output[sample] = LAYER<double> 
+	//_output[n].First[_D]
+	//_output[n].Mid[_Mk][_M]
+	//_output[n].Last[_C]
+	//---------------------------------------------------------------
+	vector<LAYER<double>> _output;
 
 	//Constructor
 	NN(int D, int C, int M, int Mk, double epsilon, int batch_size);//Parameter setting
@@ -77,4 +91,7 @@ public:
 
 	//学習　input_datas：入力データ，input_labels：教師ラベル
 	void Learning(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels);
+
+	//出力結果チェック用　input_datas：入力データ，input_labels：教師ラベル
+	void check(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels);
 };

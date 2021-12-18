@@ -15,15 +15,15 @@ NN::NN(int D, int C, int M, int Mk, double epsilon, int batch_size) {
 	_epsilon = epsilon;
 	_batch_size = batch_size;
 
-	_output = make_v<LAYER<double>>(_batch_size);
-	for (int n = 0; n < _batch_size; n++) {
-		//weight vector set
-		_weight.First = make_v<double>(_D + 1, _M);
-		_weight.Mid = make_v<double>(_Mk, _M + 1, _M);
-		_weight.Last = make_v<double>(_M + 1, _C);
-		setWeight();
+	//weight vector set
+	_weight.First = make_v<double>(_D + 1, _M);
+	_weight.Mid = make_v<double>(_Mk - 1, _M + 1, _M);
+	_weight.Last = make_v<double>(_M + 1, _C);
+	setWeight();
 
-		//output vector set
+	//output vector set
+	_output = make_v<LAYER<double>>(_batch_size);
+	for (int n = 0; n < _batch_size; n++) {		
 		_output[n].First = make_v<double>(_D);	// = input_data
 		_output[n].Mid = make_v<double>(_Mk, _M);
 		_output[n].Last = make_v<double>(_C);
@@ -162,10 +162,10 @@ void NN::backward(const vector<double>& delta, int n) {
 		{
 			for (int m_bef = 0; m_bef < _M; m_bef++)
 			{
-				_weight.Mid[mk - 1][m_bef][m_aft] -= _epsilon * _output[n].Mid[mk - 1][m_bef] * d_sigmaoid(_output[n].Mid[mk - 1][m_aft]) * dLdO[mk][m_aft]; // update weight
-				dLdO[mk - 1][m_bef] += _weight.Mid[mk - 1][m_bef][m_aft] * d_sigmaoid(_output[n].Mid[mk - 1][m_aft]) * dLdO[mk][m_aft];
+				_weight.Mid[mk - 1][m_bef][m_aft] -= _epsilon * _output[n].Mid[mk - 1][m_bef] * d_sigmaoid(_output[n].Mid[mk][m_aft]) * dLdO[mk][m_aft]; // update weight
+				dLdO[mk - 1][m_bef] += _weight.Mid[mk - 1][m_bef][m_aft] * d_sigmaoid(_output[n].Mid[mk][m_aft]) * dLdO[mk][m_aft];
 			}
-			_weight.Mid[mk - 1][_M][m_aft] -= _epsilon * 1 * d_sigmaoid(_output[n].Mid[mk - 1][m_aft]) * dLdO[mk][m_aft]; // update bias weight
+			_weight.Mid[mk - 1][_M][m_aft] -= _epsilon * 1 * d_sigmaoid(_output[n].Mid[mk][m_aft]) * dLdO[mk][m_aft]; // update bias weight
 		}
 	}
 
@@ -195,13 +195,17 @@ void NN::Learning(const vector<vector<double>> input_datas, const vector<vector<
 		cerr << "cannot open the file - 'trainLog.txt'" << endl;
 		exit(1);
 	}
-	while (L > 0.0001 && num < 1e+5)
+	while (L > 0.0001 && num < 1e+6)
 	{
-		L = 0;
+
 		num++;
+		if (num % 5000 == 0) {
+			check(input_datas, input_labels);
+		}
 		//minibatch
 		for (int t = 0; t < N / _batch_size; t++)
 		{
+			L = 0;
 			fill_v(delta, 0.0);
 			for (int i = 0; i < _batch_size; i++)
 			{
@@ -221,7 +225,35 @@ void NN::Learning(const vector<vector<double>> input_datas, const vector<vector<
 				backward(delta, i);
 			}
 		}
-		cout << num << " : " << L << endl;
+		cout <<"\r" << num << " : " << L;
 		ofs << num << "," << L << endl;
 	}ofs.close();
+}
+
+//---------------------------
+// check output
+//---------------------------
+void NN::check(const vector<vector<double>> input_datas, const vector<vector<double>> input_labels) {
+	int N = input_datas.size();
+	uniform_int_distribution<> randN(0, N - 1);
+	int n;
+	cout << endl;
+	if (_batch_size <= 6) {//XOR data
+		for (int t = 0; t < N / _batch_size; t++)for (int i = 0; i < _batch_size; i++) {
+			n = i + _batch_size * t;
+			forward(input_datas[n], i);
+			for (int c = 0; c < _C; c++) {
+				cout << n << " : " << input_labels[n][c] << " : "
+					<< _output[i].Last[c] << endl;
+			}
+		}
+	}
+	else {//EMG data
+		n = randN(mt);
+		forward(input_datas[n], 0);
+		for (int c = 0; c < _C; c++) {
+			cout << n << " : " << input_labels[n][c] << " : "
+				<< _output[0].Last[c] << endl;
+		}
+	}cout << endl;
 }
