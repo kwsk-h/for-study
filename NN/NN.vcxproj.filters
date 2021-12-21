@@ -18,7 +18,10 @@
     <ClInclude Include="NN.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="file.h">
+    <ClInclude Include="..\INCLUDE\file.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\INCLUDE\vecMACRO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

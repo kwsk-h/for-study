@@ -139,16 +139,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="confusionmatrix.cpp" />
+    <ClCompile Include="..\INCLUDE\confusionmatrix.cpp" />
     <ClCompile Include="LLGMN.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="TA_LLGMN.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="confusionmatrix.h" />
-    <ClInclude Include="file.h" />
+    <ClInclude Include="..\INCLUDE\confusionmatrix.h" />
+    <ClInclude Include="..\INCLUDE\file.h" />
+    <ClInclude Include="..\INCLUDE\vecMACRO.h" />
     <ClInclude Include="LLGMN.h" />
-    <ClInclude Include="vecMACRO.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

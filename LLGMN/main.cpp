@@ -1,6 +1,5 @@
 #include "LLGMN.h"
-#include "file.h"
-#include "confusionmatrix.h"
+#include "../INCLUDE/file.h"
 #include <conio.h>
 
 int main(void)

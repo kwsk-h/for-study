@@ -139,7 +139,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="file.h" />
+    <ClInclude Include="..\INCLUDE\file.h" />
+    <ClInclude Include="..\INCLUDE\vecMACRO.h" />
     <ClInclude Include="NN.h" />
   </ItemGroup>
   <ItemGroup>

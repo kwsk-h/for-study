@@ -28,8 +28,8 @@ smp_time					0.001
 #include<random>
 #include<algorithm>
 #include<iomanip>
-#include "vecMACRO.h"
-#include "confusionmatrix.h"
+#include "../INCLUDE/vecMACRO.h"
+#include "../INCLUDE/confusionmatrix.h"
 using namespace std;
 
 class LLGMN

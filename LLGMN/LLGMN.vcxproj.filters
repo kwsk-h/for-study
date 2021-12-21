@@ -24,7 +24,7 @@
     <ClCompile Include="TA_LLGMN.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="confusionmatrix.cpp">
+    <ClCompile Include="..\INCLUDE\confusionmatrix.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,13 +32,13 @@
     <ClInclude Include="LLGMN.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="file.h">
+    <ClInclude Include="..\INCLUDE\confusionmatrix.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="confusionmatrix.h">
+    <ClInclude Include="..\INCLUDE\file.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="vecMACRO.h">
+    <ClInclude Include="..\INCLUDE\vecMACRO.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

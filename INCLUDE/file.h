@@ -8,11 +8,10 @@
 #include<string>
 using namespace std;
 
-//void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
-//void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
+void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
+void filewrite(string filename, vector<vector<double>>& datas);//ファイル書き出し用
 
-template<typename T>
-void fileset(string filename, vector<vector<T>>& datas)
+void fileset(string filename, vector<vector<double>>& datas)
 {
 	ifstream ifs_file(filename);
 	if (ifs_file.fail()) {	// ファイルオープンに失敗したらそこで終了
@@ -23,18 +22,23 @@ void fileset(string filename, vector<vector<T>>& datas)
 	while(getline(ifs_file, line)) { // 1行読んで
 		replace(line.begin(), line.end(), ',', ' '); //カンマ区切りを空白区切りに
 		istringstream iss(line);
-		vector<T> inner;
-		T data;
+		vector<double> inner;
+		double data;
 		while (iss >> data) { // 1個ずつ切り分ける
 			inner.push_back(data);
 		}
 		datas.push_back(inner);
 	}
+	ifs_file.close();
 }
 
-template<typename T>
-void filewrite(string filename, vector<vector<T>>& datas) 
+
+void filewrite(string filename, vector<vector<double>>& datas) 
 {
+	string sep;
+	int fnd = filename.find(".csv");
+	if (fnd == std::string::npos) sep = "\t";//not csv
+	else sep = ",";
 	ofstream ofs(filename);
 	if (ofs.fail()) {	// ファイルオープンに失敗したらそこで終了
 		cerr << "cannot open the file - '" << filename << "'" << endl;
@@ -43,8 +47,9 @@ void filewrite(string filename, vector<vector<T>>& datas)
 	for (auto data : datas) {
 		for (auto x : data) {
 			if (x == data[0]) ofs << x;
-			else ofs << "\t" << x;
+			else ofs << sep << x;
 		}
 		ofs << endl;
 	}
+	ofs.close();
 }

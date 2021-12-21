@@ -1,5 +1,5 @@
 #include "NN.h"
-#include "file.h"
+#include "../INCLUDE/file.h"
 
 int main(void)
 {
@@ -30,7 +30,7 @@ int main(void)
 	int M = 3;												//中間層の要素数
 	int Mk =  3;											//中間層の層数
 	double epsilon = 0.05;								//学習率
-	int batch_size = 6;			//batchサイズの指定(1←online, N←batch, n←mini batch)
+	int batch_size = 3;			//batchサイズの指定(1←online, N←batch, n←mini batch)
 
 	NN nn(D, C, M, Mk, epsilon, batch_size);
 	cout << endl;
