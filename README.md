@@ -5,8 +5,9 @@
 ***
 *プログラム名　作成者　日付*
 ***
-* LLGMN by Kawasaki 21/06/17  
-* Kmeans by Kawasaki 21/10/17  
+* LLGMN by kwsk-h 21/06/17  
+* Kmeans by kwsk-h 21/10/17  
+* NN by kwsk-h 21/12/20  
 ***
 <br>
 Patarn〇は「続・わかりやすい　パターン認識　～教師なし学習入門～」　石井，上田　より
