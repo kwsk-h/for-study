@@ -1,5 +1,5 @@
 #include "NN.h"
-#include "../INCLUDE/file.h"
+#include "file.h"
 
 int main(void)
 {

@@ -1,5 +1,5 @@
 #include "LLGMN.h"
-#include "../INCLUDE/file.h"
+#include "file.h"
 #include <conio.h>
 
 int main(void)

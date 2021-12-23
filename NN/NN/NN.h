@@ -9,7 +9,7 @@
 #include <fstream>
 #include <string>
 #include <random>
-#include "../INCLUDE/vecMACRO.h"
+#include "vecMACRO.h"
 
 using namespace std;
 
