@@ -1,11 +1,12 @@
 #pragma once
 
 #include<stdio.h>
-#include<iostream>
 #include<vector>
+#include<string>
+#include<iostream>
 #include<fstream>
 #include<sstream>
-#include<string>
+#include<algorithm>
 using namespace std;
 
 void fileset(string filename, vector<vector<double>>& datas);//ファイル読み込み用
